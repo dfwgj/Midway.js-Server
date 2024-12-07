@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es2018", // 编译目标为 ES2018
+    "module": "commonjs", // 使用 CommonJS 模块
+    "moduleResolution": "node", // 采用 Node 模块解析策略
+    "experimentalDecorators": true, // 启用装饰器
+    "emitDecoratorMetadata": true, // 在编译时生成装饰器的元数据
+    "inlineSourceMap": true, // 内联源映射，便于调试
+    "noImplicitThis": false, // 允许隐式的 `this` 类型
+    "noUnusedLocals": true, // 不允许未使用的本地变量
+    "stripInternal": true, // 移除所有声明文件中的 `@internal` 注解
+    "skipLibCheck": true, // 跳过库文件的类型检查，提升编译速度
+    "pretty": true, // 优化输出格式
+    "declaration": true, // 生成声明文件 `.d.ts`
+    "forceConsistentCasingInFileNames": true, // 强制文件名一致性
+    "typeRoots": [
+      "./typings", 
+      "./node_modules/@types"
+    ], // 指定自定义类型定义的位置
+    "outDir": "dist", // 编译输出目录
+    "rootDir": "src" // 代码根目录
+  },
+  "exclude": [
+    "node_modules", // 排除 node_modules 文件夹
+    "dist", // 排除编译后的 dist 文件夹
+    "test", // 排除测试文件夹
+    "**/*.js" // 排除所有 JS 文件
+  ],
+  "compileOnSave": true // 启用保存时自动编译
+}
