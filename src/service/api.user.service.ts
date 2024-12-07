@@ -1,8 +1,9 @@
 import { Provide, Inject } from '@midwayjs/core';
 import { UserDao } from '../dao/userDao';
 import { UserDTO } from '../dto/user';
+//import { Caching } from '@midwayjs/cache-manager';
 import * as bcrypt from 'bcrypt';
-import { BigIntService } from '../service/bigInt.service';
+import { BigIntService } from './bigInt.service';
 
 @Provide()
 
@@ -14,6 +15,12 @@ export class UserService {
   @Inject()
   bigIntService: BigIntService;
   // 获取用户信息的方法
+  // @Caching('redis', (user) => {
+  //   if (user.methodArgs.length > 0) {
+  //     return `user:${user.methodArgs[0]}`;
+  //   }
+  //   return null;
+  // })
   async getUser(userId: UserDTO['userId']) {
     try {
       return await this.userDao.getUser(userId);
@@ -45,7 +52,7 @@ export class UserService {
       throw error;
     }
   }
-  // 通过用户账号查找用户
+  // 通过用户注册
   async register(body: UserDTO) {
     try {
       body.hashPassword = await bcrypt.hash(body.password, 10);

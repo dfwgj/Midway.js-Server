@@ -1,8 +1,8 @@
 import { Inject, Middleware, httpError, Config } from '@midwayjs/core';
 import { Context, NextFunction } from '@midwayjs/koa';
 import { JwtService } from '@midwayjs/jwt';
-import { UserService } from '../service/user.service'; // 假设你有一个用户服务，用于处理获取用户数据等
-import { AuthService } from '../service/auth.service'; // 假设你有一个鉴权服务，用于处理鉴权逻辑
+import { UserService } from '../service/api.user.service'; // 假设你有一个用户服务，用于处理获取用户数据等
+import { AuthService } from '../service/api.auth.service'; // 假设你有一个鉴权服务，用于处理鉴权逻辑
 
 @Middleware()
 export class JwtMiddleware {
@@ -39,7 +39,7 @@ export class JwtMiddleware {
           }
           if (error.name === 'JsonWebTokenError') {
             throw new httpError.UnauthorizedError('无效或过期的 Token');
-            }
+          }
           if (error.name === 'TokenExpiredError') {
             try {
               // Token 过期时，尝试刷新 token

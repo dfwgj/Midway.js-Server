@@ -1,5 +1,6 @@
 // src/filters/error.filter.ts
 import { Catch, HttpStatus, httpError } from '@midwayjs/core';
+import { MidwayValidationError } from '@midwayjs/validate';
 import { Context } from '@midwayjs/koa';
 
 // 默认错误过滤器定义
@@ -16,7 +17,7 @@ export class ErrorFilter {
         let statusCode = 500;  // 默认是服务器错误
         let message = 'Internal Server Error';  // 默认错误消息
         // 根据不同的错误类型进行处理
-        if (err instanceof httpError.BadRequestError) {
+        if (err instanceof httpError.BadRequestError || err instanceof MidwayValidationError) {
             statusCode = HttpStatus.BAD_REQUEST;
             message = 'Bad request';
         } else if (err instanceof httpError.UnauthorizedError) {

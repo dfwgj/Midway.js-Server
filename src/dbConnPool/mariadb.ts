@@ -1,5 +1,6 @@
 import { Pool, PoolConnection } from 'mariadb';
 import { Config } from '../dto/config'; // 引入类型
+import { httpError } from '@midwayjs/core';
 import dbConfig from '../config/config.default'; // 引入数据库配置
 const mariadb = require('mariadb');
 const config = dbConfig as Config; // dbConfig 已经是正确的类型
@@ -18,12 +19,17 @@ export const query = async (sql: string, sqlParams: any[]): Promise<any> => {
   try {
     conn = await pool.getConnection();
     // 仅在开发环境下打印 SQL 查询语句
-    if (process.env.NODE_ENV === 'loacl') {
+    if (process.env.NODE_ENV === 'local') {
       console.log(`Executing SQL query: ${sql}`);
       console.log(`With parameters: ${JSON.stringify(sqlParams)}`);
     }
     // 使用参数化查询执行数据库操作
-    return await conn.query(sql, sqlParams); // 直接传入 sqlParams
+    const [result] = await conn.query(sql, sqlParams); // 直接传入 sqlParams
+    // 检查查询结果是否为空
+    if (!result||result.length === 0) {
+      throw new httpError.ForbiddenError('Query result is empty');
+    }
+    return result; // 返回查询结果
   } catch (err) {
     console.error('Database query error:', err);
     console.error('SQL:', sql); // 输出出错的 SQL 查询

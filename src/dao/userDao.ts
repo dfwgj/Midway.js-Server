@@ -10,28 +10,14 @@ export class UserDao {
 
   // 获取用户信息
   async getUser(userId: UserDTO['userId']) {
-    // 尝试从 Redis 获取用户信息
-    console.log(`Fetching user data for userId: ${userId}`);
-    const cachedUser = await this.redisService.get(`user:${userId}`);
-    if (cachedUser) {
-      return cachedUser;
-    }
-    // 如果 Redis 中没有，从数据库查询
     const sql = `
       SELECT name, department, created_at, is_employment
         FROM xuesheng_user
         WHERE user_id = ?
     `;
     const sqlParams = [userId];
-    const user = await query(sql, sqlParams);
-
-    // 将用户信息缓存到 Redis
-    if (user && user.length > 0) {
-      await this.redisService.set(`user:${userId}`, JSON.stringify(user[0]));
-    }
-    return user[0];
-  }
-
+    return await query(sql, sqlParams);
+}
   // 新添加用户
   async addUser(body: UserDTO) {
     const sql = `
@@ -40,24 +26,11 @@ export class UserDao {
         VALUES (?, ?, ?, ?, NOW())
     `;
     const sqlParams = [body.name, body.account, body.email, body.hashPassword];
-    const result = await query(sql, sqlParams);
-
-    // 如果添加成功，清除对应用户的缓存
-    if (result.insertId) {
-      await this.redisService.del(`user:${result.insertId}`);
-    }
-
-    return result;
+    return await query(sql, sqlParams);
   }
 
   // 查找用户
   async findUserById(userId: UserDTO['userId']) {
-    // 尝试从 Redis 获取用户信息
-    const cachedUser = await this.redisService.get(`user:${userId}`);
-    if (cachedUser) {
-      return cachedUser;
-    }
-    // 如果 Redis 中没有，从数据库查询
     const sql = `
       SELECT 
         user_id AS userId,
@@ -68,12 +41,7 @@ export class UserDao {
         WHERE user_id = ?
     `;
     const sqlParams = [userId];
-    const user = await query(sql, sqlParams);
-    // 将用户信息缓存到 Redis
-    if (user && user.length > 0) {
-      await this.redisService.set(`user:${userId}`, JSON.stringify(user[0]));
-    }
-    return user[0];
+    return await query(sql, sqlParams)[0];
   }
 
   // 新用户注册
@@ -84,11 +52,6 @@ export class UserDao {
         VALUES (?, ?, ?, ?, ?, NOW())
     `;
     const sqlParams = [body.account, body.name, body.email, body.hashPassword, body.department];
-    const result = await query(sql, sqlParams);
-    // 如果注册成功，清除对应用户的缓存
-    if (result.insertId) {
-      await this.redisService.del(`user:${result.insertId}`);
-    }
-    return result;
+    return await query(sql, sqlParams);
   }
 }

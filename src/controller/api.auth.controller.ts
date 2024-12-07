@@ -1,7 +1,7 @@
 import { Inject, Controller, Post, Put, Body, Headers, UseGuard } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { AuthService } from '../service/auth.service';
-import { UserService } from '../service/user.service';
+import { AuthService } from '../service/api.auth.service';
+import { UserService } from '../service/api.user.service';
 import { UserDTO, LoginDTO } from '../dto/user';
 import { AuthGuard } from '../guard/auth.guard';
 
@@ -38,7 +38,7 @@ export class LoginController {
    * @returns {Object} payload 凭证负载
    */
   @Post('/tokenVerify')
-  async tokenVerify(@Headers('Authorization') token:UserDTO["token"]): Promise<Object> {
+  async tokenVerify(@Headers('Authorization') token: UserDTO["token"]): Promise<Object> {
     token = this.ctx.request.header.authorization.split(' ')[1];
     try {
       return await this.authService.tokenVerify(token);
@@ -54,7 +54,7 @@ export class LoginController {
    */
   @UseGuard(AuthGuard)
   @Put('/setAdmin')
-  async setAdmin(@Body() { userId }: { userId: UserDTO["userId"] }):Promise<object> {
+  async setAdmin(@Body() { userId }: { userId: UserDTO["userId"] }): Promise<object> {
     try {
       const user = await this.userService.findById(userId);
       if (!user) {

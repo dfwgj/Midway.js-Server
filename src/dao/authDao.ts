@@ -21,20 +21,9 @@ export class AuthDao {
         account = ?
 `;
     const sqlParams = [account];
-    const user = await query(sql, sqlParams);
-    // 将用户信息缓存到 Redis
-    if (user && user.length > 0) {
-      await this.redisService.set(`user:${user[0].userId}`, JSON.stringify(user[0]));
-    }
-    return user[0];
+    return await query(sql, sqlParams)[0];
   }
   async getUserById(userId: UserDTO["userId"]) {
-    // 尝试从 Redis 获取用户信息
-    const cachedUser = await this.redisService.get(`user:${userId}`);
-    if (cachedUser) {
-      return cachedUser;
-    }
-    // 如果 Redis 中没有，从数据库查询
     const sql = `
     SELECT
         user_id AS userId,
@@ -46,12 +35,7 @@ export class AuthDao {
         user_id = ?
 `;
     const sqlParams = [userId];
-    const user = await query(sql, sqlParams);
-    // 将用户信息缓存到 Redis
-    if (user && user.length > 0) {
-      await this.redisService.set(`user:${user[0].userId}`, JSON.stringify(user[0]));
-    }
-    return user[0];
+    return await query(sql, sqlParams)[0];
   }
   
   async setAdmin(userId: UserDTO["userId"]) {

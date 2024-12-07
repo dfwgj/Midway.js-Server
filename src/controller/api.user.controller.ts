@@ -1,6 +1,6 @@
 import { Inject, Controller, Get, Query, Post, Body, UseGuard } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
-import { UserService } from '../service/user.service';
+import { UserService } from '../service/api.user.service';
 import { UserDTO } from '../dto/user';
 import { AuthGuard } from '../guard/auth.guard';
 
@@ -25,6 +25,7 @@ export class APIController {
     try {
       return await this.userService.getUser(userId);
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
