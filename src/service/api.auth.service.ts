@@ -3,7 +3,6 @@ import { JwtService } from '@midwayjs/jwt';
 import { Context } from '@midwayjs/koa';
 import * as bcrypt from 'bcrypt';
 import { AuthDao } from '../dao/authDao';
-import { Caching } from '@midwayjs/cache-manager';
 import { BigIntService } from './bigInt.service';
 import { LoginDTO, UserDTO } from '../dto/user'
 
@@ -59,7 +58,6 @@ export class AuthService {
       throw error;
     }
   }
-  @Caching('redis', 'user') // 设置缓存
   // 根据 Token 获取用户信息
   async getUserByToken(token: UserDTO['token']) {
     try {
@@ -68,6 +66,7 @@ export class AuthService {
       const userId = decoded.payload.userId;
       // 使用 userId 查询用户信息
       let user = await this.authDao.getUserById(userId);
+      console.log(user)
       user = {
         userId: user.userId,
         userAccount: user.account,

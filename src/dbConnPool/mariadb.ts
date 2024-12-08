@@ -24,7 +24,7 @@ export const query = async (sql: string, sqlParams: any[]): Promise<any> => {
       console.log(`With parameters: ${JSON.stringify(sqlParams)}`);
     }
     // 使用参数化查询执行数据库操作
-    const [result] = await conn.query(sql, sqlParams); // 直接传入 sqlParams
+    const result = await conn.query(sql, sqlParams); // 直接传入 sqlParams
     // 检查查询结果是否为空
     if (!result||result.length === 0) {
       throw new httpError.ForbiddenError('Query result is empty');

@@ -17,7 +17,7 @@ export class UserDTO {
     @Rule(RuleType.string().max(200))
     token: string;
     @Rule(RuleType.string().min(1).max(200))
-    userId:string;
+    userId:string|number ;
 }
 export class LoginDTO extends PickDto(UserDTO, ['account', 'password','hashPassword']) {}
 //PickDto选定继承对象中的属性，OmitDto剔除继承对象中的属性

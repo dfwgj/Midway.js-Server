@@ -2,6 +2,7 @@ import { Inject, Provide } from '@midwayjs/core';
 import { query } from '../dbConnPool/mariadb'; // 引入查询函数
 import { LoginDTO, UserDTO } from '../dto/user';
 import { CustomRedisService } from '../service/redis.service';
+import { Caching } from '@midwayjs/cache-manager';
 
 @Provide()
 export class AuthDao {
@@ -21,8 +22,17 @@ export class AuthDao {
         account = ?
 `;
     const sqlParams = [account];
-    return await query(sql, sqlParams)[0];
+    console.log('account', account);
+    return (await query(sql, sqlParams))[0];
   }
+  // 获取用户信息
+  @Caching('redis', (userId) => {
+    if (userId.methodArgs.length > 0) {
+      console.log('user6666', `userId:${userId.methodArgs[0]}`);
+      return `userId:${userId.methodArgs[0]}`;
+    }
+    return null;
+  })
   async getUserById(userId: UserDTO["userId"]) {
     const sql = `
     SELECT
@@ -35,7 +45,9 @@ export class AuthDao {
         user_id = ?
 `;
     const sqlParams = [userId];
-    return await query(sql, sqlParams)[0];
+    const user = (await query(sql, sqlParams))[0];
+    console.log('user1111', user);
+    return user;
   }
   
   async setAdmin(userId: UserDTO["userId"]) {

@@ -1,26 +1,17 @@
 import { Provide, Inject } from '@midwayjs/core';
 import { UserDao } from '../dao/userDao';
 import { UserDTO } from '../dto/user';
-//import { Caching } from '@midwayjs/cache-manager';
+import { Caching } from '@midwayjs/cache-manager';
 import * as bcrypt from 'bcrypt';
 import { BigIntService } from './bigInt.service';
 
 @Provide()
-
-
 export class UserService {
 
   @Inject()
   userDao: UserDao;
   @Inject()
   bigIntService: BigIntService;
-  // 获取用户信息的方法
-  // @Caching('redis', (user) => {
-  //   if (user.methodArgs.length > 0) {
-  //     return `user:${user.methodArgs[0]}`;
-  //   }
-  //   return null;
-  // })
   async getUser(userId: UserDTO['userId']) {
     try {
       return await this.userDao.getUser(userId);
@@ -28,7 +19,12 @@ export class UserService {
       throw error;
     }
   }
-
+  @Caching('redis', (user) => {
+    if (user.methodArgs.length > 0) {
+      return `user:${user.methodArgs[0]}`;
+    }
+    return null;
+  })
   // 添加新用户的方法
   async addUser(body: UserDTO) {
     try {

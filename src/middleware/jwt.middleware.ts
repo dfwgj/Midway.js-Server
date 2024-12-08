@@ -88,7 +88,6 @@ export class JwtMiddleware {
     // 获取用户信息
     const userService = await ctx.requestContext.getAsync(UserService);
     const user = await userService.findById(userId);
-    console.log(user);
     if (!user) {
       throw new httpError.UnauthorizedError('用户未找到');
     }

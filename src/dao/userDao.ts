@@ -2,13 +2,20 @@ import { Provide, Inject } from '@midwayjs/core';
 import { RedisService } from '@midwayjs/redis';
 import { query } from '../dbConnPool/mariadb'; // 引入查询函数
 import { UserDTO } from '../dto/user';
+import { Caching } from '@midwayjs/cache-manager';
 
 @Provide()
 export class UserDao {
   @Inject()
   redisService: RedisService; // 注入 Redis 服务
 
-  // 获取用户信息
+  //  获取用户信息
+  @Caching('redis', (ctx) => {
+    if (ctx.methodArgs.length > 0) {
+      return `user:${ctx.methodArgs[0]}`;
+    }
+    return null;
+  })
   async getUser(userId: UserDTO['userId']) {
     const sql = `
       SELECT name, department, created_at, is_employment
@@ -16,8 +23,8 @@ export class UserDao {
         WHERE user_id = ?
     `;
     const sqlParams = [userId];
-    return await query(sql, sqlParams);
-}
+    return (await query(sql, sqlParams))[0];
+  }
   // 新添加用户
   async addUser(body: UserDTO) {
     const sql = `
@@ -41,7 +48,7 @@ export class UserDao {
         WHERE user_id = ?
     `;
     const sqlParams = [userId];
-    return await query(sql, sqlParams)[0];
+    return (await query(sql, sqlParams))[0];
   }
 
   // 新用户注册
