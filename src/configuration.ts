@@ -1,4 +1,4 @@
-import { Configuration, App, IMidwayContainer } from '@midwayjs/core';
+import { Configuration, App, IMidwayContainer,Inject, MidwayDecoratorService } from '@midwayjs/core';
 import * as koa from '@midwayjs/koa';
 import * as validate from '@midwayjs/validate';
 import * as info from '@midwayjs/info';
@@ -29,6 +29,8 @@ import * as redis from '@midwayjs/redis';
 export class MainConfiguration {
   @App('koa')
   app: koa.Application;
+  @Inject()
+  decoratorService: MidwayDecoratorService;
 
   async onReady(applicationContext: IMidwayContainer): Promise<void> {
     // 添加中间件
