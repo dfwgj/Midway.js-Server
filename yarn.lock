@@ -687,6 +687,11 @@
     lodash.clonedeep "4.5.0"
     lru-cache "7.18.3"
 
+"@midwayjs/code-dye@3":
+  version "3.19.0"
+  resolved "https://registry.npmmirror.com/@midwayjs/code-dye/-/code-dye-3.19.0.tgz#7517a9df29806219a945973c01eb2b113551e93b"
+  integrity sha512-eq/WsqFeRS6d4IApf8OTTpFMr73WvxGZXZtNwPGGzdPmavb2fUKU/avnnRNhl2tKPKeAskebt+eZ+2l9e7xIqQ==
+
 "@midwayjs/cookies@^1.0.2":
   version "1.2.0"
   resolved "https://registry.npmmirror.com/@midwayjs/cookies/-/cookies-1.2.0.tgz#2b15abdec6664f35b6d3ddd6d64435899aae1625"

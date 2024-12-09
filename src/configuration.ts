@@ -10,6 +10,7 @@ import { JwtMiddleware } from './middleware/jwt.middleware';
 import { FormatMiddleware } from './middleware/api.middleware';
 import * as cacheManager from '@midwayjs/cache-manager';
 import * as redis from '@midwayjs/redis';
+import * as codeDye from '@midwayjs/code-dye';
 //import { AuthGuard } from './guard/auth.guard';
 
 @Configuration({
@@ -21,6 +22,10 @@ import * as redis from '@midwayjs/redis';
     cacheManager,
     {
       component: info,
+      enabledEnvironment: ['local'],
+    },
+    {
+      component: codeDye,
       enabledEnvironment: ['local'],
     },
   ],
