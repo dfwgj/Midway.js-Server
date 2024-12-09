@@ -12,28 +12,26 @@ describe('test/controller/api.auth.test.ts', () => {
       .post('/api/auth/login')
       .set('Content-Type', 'application/json')
       .send({
-        account: "10086",  // 替换为正确的测试账号
-        password: "138000"    // 替换为正确的密码
+        account: "1233456",  // 替换为正确的测试账号
+        password: "12345678"    // 替换为正确的密码
       });
     // 从登录返回结果中提取token
-    console.log(loginResult.body);
-      const token = loginResult.body.data;
+    const token = loginResult.body.data;
     expect(loginResult.status).toBe(200);
 
     // 验证token是否有效
     const verifyResult = await createHttpRequest(app)
       .post('/api/auth/tokenVerify')
       .set('Authorization', `Bearer ${token}`);
-      expect(verifyResult.status).toBe(200);
+    expect(verifyResult.status).toBe(200);
+
     // 使用获取的token请求用户信息
     const result = await createHttpRequest(app)
       .get('/api/user/getUser')
       .set('Authorization', `Bearer ${token}`)
-      .query({ userId: 1 });
-
+      .query({ userId: 135 });
     // 验证用户信息请求的结果
     expect(result.status).toBe(200);
-
     // 关闭应用
     await close(app);
   });

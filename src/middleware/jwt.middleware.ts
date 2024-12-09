@@ -47,7 +47,7 @@ export class JwtMiddleware {
               ctx.set('Authorization', `Bearer ${refreshToken}`); // 将新 Token 设置到响应头
               // 使用新的 Token 获取用户信息
               const authService = await ctx.requestContext.getAsync(AuthService);
-              ctx.state.user = await authService.getUserByToken(refreshToken);
+              ctx.state.user = await authService.tokenVerify(refreshToken);
               await next();
             } catch (refreshError) {
               throw refreshError;

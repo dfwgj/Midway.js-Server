@@ -23,7 +23,7 @@ export class APIController {
   async getUser(@Query('userId') userId: UserDTO['userId']): Promise<object> {
     // 检查 uid 是否存在
     try {
-      return await this.userService.getUser(userId);
+      return await this.userService.findById(userId);
     } catch (error) {
       console.log(error);
       throw error;
