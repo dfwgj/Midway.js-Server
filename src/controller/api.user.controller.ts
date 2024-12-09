@@ -4,7 +4,7 @@ import { UserService } from '../service/api.user.service';
 import { UserDTO } from '../dto/user';
 import { AuthGuard } from '../guard/auth.guard';
 
-@Controller('/api/user')
+@Controller('/user')
 //使用@Controller 装饰器定义了一个控制器，路由前缀为 /api/user。这意味着所有与用户相关的请求都将以这个路径开头。
 export class APIController {
   @Inject()

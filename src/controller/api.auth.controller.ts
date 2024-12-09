@@ -5,7 +5,7 @@ import { UserService } from '../service/api.user.service';
 import { UserDTO, LoginDTO } from '../dto/user';
 import { AuthGuard } from '../guard/auth.guard';
 
-@Controller('/api/auth')
+@Controller('/auth')
 export class LoginController {
   @Inject()
   ctx: Context;
