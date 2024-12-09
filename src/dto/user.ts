@@ -1,5 +1,5 @@
 // src/dto/user.ts
-import { Rule, RuleType, PickDto } from "@midwayjs/validate";
+import { Rule, RuleType, PickDto } from '@midwayjs/validate';
 const requiredString = RuleType.string().required();
 export class UserDTO {
   @Rule(requiredString.min(0).max(30))
@@ -20,8 +20,8 @@ export class UserDTO {
   userId: string | number;
 }
 export class LoginDTO extends PickDto(UserDTO, [
-  "account",
-  "password",
-  "hashPassword",
+  'account',
+  'password',
+  'hashPassword',
 ]) {}
 //PickDto选定继承对象中的属性，OmitDto剔除继承对象中的属性

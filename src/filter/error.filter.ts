@@ -1,7 +1,7 @@
 // src/filters/error.filter.ts
-import { Catch, HttpStatus, httpError } from "@midwayjs/core";
-import { MidwayValidationError } from "@midwayjs/validate";
-import { Context } from "@midwayjs/koa";
+import { Catch, HttpStatus, httpError } from '@midwayjs/core';
+import { MidwayValidationError } from '@midwayjs/validate';
+import { Context } from '@midwayjs/koa';
 
 // 默认错误过滤器定义
 @Catch()
@@ -15,23 +15,23 @@ export class ErrorFilter {
    */
   async catch(err: Error, ctx: Context) {
     let statusCode = 500; // 默认是服务器错误
-    let message = "Internal Server Error"; // 默认错误消息
+    let message = 'Internal Server Error'; // 默认错误消息
     // 根据不同的错误类型进行处理
     if (
       err instanceof httpError.BadRequestError ||
       err instanceof MidwayValidationError
     ) {
       statusCode = HttpStatus.BAD_REQUEST;
-      message = "Bad request";
+      message = 'Bad request';
     } else if (err instanceof httpError.UnauthorizedError) {
       statusCode = HttpStatus.UNAUTHORIZED;
-      message = "Unauthorized";
+      message = 'Unauthorized';
     } else if (err instanceof httpError.ForbiddenError) {
       statusCode = HttpStatus.FORBIDDEN;
-      message = "Forbidden";
+      message = 'Forbidden';
     } else if (err instanceof httpError.InternalServerErrorError) {
       statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
-      message = "Internal server error";
+      message = 'Internal server error';
     }
 
     // 设置响应状态码

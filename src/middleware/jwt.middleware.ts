@@ -47,7 +47,6 @@ export class JwtMiddleware {
             throw new httpError.UnauthorizedError("无效或过期的 Token");
           }
           if (error.name === "TokenExpiredError") {
-            try {
               // Token 过期时，尝试刷新 token
               const refreshToken = await this.refreshToken(ctx, token);
               ctx.set("Authorization", `Bearer ${refreshToken}`); // 将新 Token 设置到响应头
@@ -57,9 +56,6 @@ export class JwtMiddleware {
               );
               ctx.state.user = await authService.tokenVerify(refreshToken);
               await next();
-            } catch (refreshError) {
-              throw refreshError;
-            }
           } else {
             throw error;
           }

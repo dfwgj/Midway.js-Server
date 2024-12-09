@@ -6,13 +6,13 @@ import {
   Post,
   Body,
   UseGuard,
-} from "@midwayjs/core";
-import { Context } from "@midwayjs/koa";
-import { UserService } from "../service/api.user.service";
-import { UserDTO } from "../dto/user";
-import { AuthGuard } from "../guard/auth.guard";
+} from '@midwayjs/core';
+import { Context } from '@midwayjs/koa';
+import { UserService } from '../service/api.user.service';
+import { UserDTO } from '../dto/user';
+import { AuthGuard } from '../guard/auth.guard';
 
-@Controller("/user")
+@Controller('/user')
 //使用@Controller 装饰器定义了一个控制器，路由前缀为 /api/user。这意味着所有与用户相关的请求都将以这个路径开头。
 export class APIController {
   @Inject()
@@ -27,8 +27,8 @@ export class APIController {
    * @returns {object} user - 用户信息
    */
   @UseGuard(AuthGuard)
-  @Get("/getUser")
-  async getUser(@Query("userId") userId: UserDTO["userId"]): Promise<object> {
+  @Get('/getUser')
+  async getUser(@Query('userId') userId: UserDTO['userId']): Promise<object> {
     // 检查 uid 是否存在
     try {
       return await this.userService.findById(userId);
@@ -46,13 +46,9 @@ export class APIController {
    * @param {string} password - 密码
    * @returns {object} user - 用户信息
    * */
-  @Post("/addUser")
+  @Post('/addUser')
   async addUser(@Body() body: UserDTO): Promise<object> {
-    try {
-      return await this.userService.addUser(body);
-    } catch (error) {
-      throw error;
-    }
+    return await this.userService.addUser(body);
   }
   /**
    * @name register 用户注册
@@ -62,12 +58,8 @@ export class APIController {
    * @param {string} password - 密码
    * @returns {object} user - 用户信息
    * */
-  @Post("/register")
+  @Post('/register')
   async register(@Body() body: UserDTO): Promise<object> {
-    try {
-      return await this.userService.register(body);
-    } catch (error) {
-      throw error;
-    }
+    return await this.userService.register(body);
   }
 }

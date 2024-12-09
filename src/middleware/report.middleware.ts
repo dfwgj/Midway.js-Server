@@ -1,5 +1,5 @@
-import { Middleware, IMiddleware } from "@midwayjs/core";
-import { NextFunction, Context } from "@midwayjs/koa";
+import { Middleware, IMiddleware } from '@midwayjs/core';
+import { NextFunction, Context } from '@midwayjs/koa';
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
@@ -21,6 +21,6 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
     };
   }
   static getName(): string {
-    return "report";
+    return 'report';
   }
 }

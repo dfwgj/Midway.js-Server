@@ -1,13 +1,13 @@
-const process = require("process");
-const { NodeSDK, node, resources } = require("@opentelemetry/sdk-node");
+const process = require('process');
+const { NodeSDK, node, resources } = require('@opentelemetry/sdk-node');
 const {
   getNodeAutoInstrumentations,
-} = require("@opentelemetry/auto-instrumentations-node");
+} = require('@opentelemetry/auto-instrumentations-node');
 
 // 初始化一个 open-telemetry 的 SDK
 const sdk = new NodeSDK({
   resource: new resources.Resource({
-    "service.name": "Midway.js-Server",
+    'service.name': 'Midway.js-Server',
   }),
   // 配置当前的导出方式，比如这里配置了一个输出到控制台的，也可以配置其他的 Exporter，比如 Jaeger
   traceExporter: new node.ConsoleSpanExporter(),
@@ -19,16 +19,16 @@ const sdk = new NodeSDK({
 sdk.start();
 
 // 在进程关闭时，同时关闭数据采集
-process.on("SIGTERM", () => {
+process.on('SIGTERM', () => {
   sdk
     .shutdown()
-    .then(() => console.log("Tracing terminated"))
-    .catch((error) => console.log("Error terminating tracing", error))
+    .then(() => console.log('Tracing terminated'))
+    .catch(error => console.log('Error terminating tracing', error))
     .finally(() => process.exit(0));
 });
 
 // 启动 Midway 应用
-const { Bootstrap } = require("@midwayjs/bootstrap");
+const { Bootstrap } = require('@midwayjs/bootstrap');
 Bootstrap.configure(/**/).run();
 //   resource: 包含服务的资源信息，例如服务名称、使用的SDK、进程信息等。
 // service.name: 服务名称，这里显示为 unknown_service。
