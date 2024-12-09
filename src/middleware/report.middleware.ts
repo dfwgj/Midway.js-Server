@@ -1,5 +1,5 @@
-import { Middleware, IMiddleware } from '@midwayjs/core';
-import { NextFunction, Context } from '@midwayjs/koa';
+import { Middleware, IMiddleware } from "@midwayjs/core";
+import { NextFunction, Context } from "@midwayjs/koa";
 
 @Middleware()
 export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
@@ -12,7 +12,8 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
       const result = await next();
       // 控制器之后执行的逻辑
       ctx.logger.info(
-        `Report in "src/middleware/report.middleware.ts", rt = ${Date.now() - startTime
+        `Report in "src/middleware/report.middleware.ts", rt = ${
+          Date.now() - startTime
         }ms`
       );
       // 返回给上一个中间件的结果
@@ -20,6 +21,6 @@ export class ReportMiddleware implements IMiddleware<Context, NextFunction> {
     };
   }
   static getName(): string {
-    return 'report';
+    return "report";
   }
 }

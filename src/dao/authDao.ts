@@ -1,10 +1,10 @@
-import { Inject, Provide } from '@midwayjs/core';
-import { InjectClient } from '@midwayjs/core';
-import { query } from '../dbConnPool/mariadb'; // 引入查询函数
-import { LoginDTO, UserDTO } from '../dto/user';
-import { UserDao } from './userDao';
-import { CachingFactory, MidwayCache } from '@midwayjs/cache-manager';
-//import { Caching} from '@midwayjs/cache-manager';
+import { Inject, Provide } from "@midwayjs/core";
+import { InjectClient } from "@midwayjs/core";
+import { query } from "../dbConnPool/mariadb"; // 引入查询函数
+import { LoginDTO, UserDTO } from "../dto/user";
+import { UserDao } from "./userDao";
+import { CachingFactory, MidwayCache } from "@midwayjs/cache-manager";
+//import { Caching} from "@midwayjs/cache-manager";
 
 @Provide()
 export class AuthDao {
@@ -27,8 +27,8 @@ export class AuthDao {
     return (await query(sql, sqlParams))[0];
   }
   //设置管理员
-  @InjectClient(CachingFactory, 'redis')
-  cache: MidwayCache;//redis缓存
+  @InjectClient(CachingFactory, "redis")
+  cache: MidwayCache; //redis缓存
   async setAdmin(userId: UserDTO["userId"]) {
     // 更新数据库中的用户角色为管理员
     const sql = `

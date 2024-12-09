@@ -1,12 +1,11 @@
-import { Provide, Inject } from '@midwayjs/core';
-import { UserDao } from '../dao/userDao';
-import { UserDTO } from '../dto/user';
-import * as bcrypt from 'bcrypt';
-import { BigIntService } from './bigInt.service';
+import { Provide, Inject } from "@midwayjs/core";
+import { UserDao } from "../dao/userDao";
+import { UserDTO } from "../dto/user";
+import * as bcrypt from "bcrypt";
+import { BigIntService } from "./bigInt.service";
 
 @Provide()
 export class UserService {
-
   @Inject()
   userDao: UserDao;
   @Inject()
@@ -25,7 +24,7 @@ export class UserService {
   }
 
   // 通过用户 ID 查找用户
-  async findById(userId: UserDTO['userId']) {
+  async findById(userId: UserDTO["userId"]) {
     try {
       // 从数据库中查询用户信息
       return await this.userDao.findUserById(userId);

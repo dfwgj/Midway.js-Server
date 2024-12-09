@@ -1,6 +1,6 @@
 // types/config.d.ts
 
-import { MidwayConfig } from '@midwayjs/core';
+import { MidwayConfig } from "@midwayjs/core";
 
 export interface DBConfig {
   host: string;
