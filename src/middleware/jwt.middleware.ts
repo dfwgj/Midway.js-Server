@@ -1,26 +1,26 @@
-import { Inject, Middleware, httpError, Config } from "@midwayjs/core";
-import { Context, NextFunction } from "@midwayjs/koa";
-import { JwtService } from "@midwayjs/jwt";
-import { UserService } from "../service/api.user.service"; // 假设你有一个用户服务，用于处理获取用户数据等
-import { AuthService } from "../service/api.auth.service"; // 假设你有一个鉴权服务，用于处理鉴权逻辑
+import { Inject, Middleware, httpError, Config } from '@midwayjs/core';
+import { Context, NextFunction } from '@midwayjs/koa';
+import { JwtService } from '@midwayjs/jwt';
+import { UserService } from '../service/api.user.service'; // 假设你有一个用户服务，用于处理获取用户数据等
+import { AuthService } from '../service/api.auth.service'; // 假设你有一个鉴权服务，用于处理鉴权逻辑
 
 @Middleware()
 export class JwtMiddleware {
   @Inject()
   jwtService: JwtService;
 
-  @Config("jwtConfig") // 动态注入配置
+  @Config('jwtConfig') // 动态注入配置
   jwtConfig: { secret: string; expiresIn: string | number };
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
       // 判断是否有 Authorization header
-      const authorization = ctx.headers["authorization"];
+      const authorization = ctx.headers['authorization'];
       if (!authorization) {
-        throw new httpError.UnauthorizedError("缺少 Authorization 头");
+        throw new httpError.UnauthorizedError('缺少 Authorization 头');
       }
-      const parts = authorization.trim().split(" ");
+      const parts = authorization.trim().split(' ');
       if (parts.length !== 2) {
-        throw new httpError.UnauthorizedError("Token 格式无效");
+        throw new httpError.UnauthorizedError('Token 格式无效');
       }
       const [scheme, token] = parts;
       if (/^Bearer$/i.test(scheme)) {
@@ -32,43 +32,41 @@ export class JwtMiddleware {
             { complete: true }
           );
           // 如果 token 有效，继续请求
-          if (typeof decoded === "string") {
-            throw new httpError.UnauthorizedError("无效的 token");
+          if (typeof decoded === 'string') {
+            throw new httpError.UnauthorizedError('无效的 token');
           }
           ctx.state.user = decoded.payload; // 将用户信息保存在 ctx.state 中
           await next();
         } catch (error) {
-          if (error.message === "ForbiddenError") {
+          if (error.message === 'ForbiddenError') {
             throw new httpError.ForbiddenError(
-              "You do not have the necessary permissions"
+              'You do not have the necessary permissions'
             );
           }
-          if (error.name === "JsonWebTokenError") {
-            throw new httpError.UnauthorizedError("无效或过期的 Token");
+          if (error.name === 'JsonWebTokenError') {
+            throw new httpError.UnauthorizedError('无效或过期的 Token');
           }
-          if (error.name === "TokenExpiredError") {
-              // Token 过期时，尝试刷新 token
-              const refreshToken = await this.refreshToken(ctx, token);
-              ctx.set("Authorization", `Bearer ${refreshToken}`); // 将新 Token 设置到响应头
-              // 使用新的 Token 获取用户信息
-              const authService = await ctx.requestContext.getAsync(
-                AuthService
-              );
-              ctx.state.user = await authService.tokenVerify(refreshToken);
-              await next();
+          if (error.name === 'TokenExpiredError') {
+            // Token 过期时，尝试刷新 token
+            const refreshToken = await this.refreshToken(ctx, token);
+            ctx.set('Authorization', `Bearer ${refreshToken}`); // 将新 Token 设置到响应头
+            // 使用新的 Token 获取用户信息
+            const authService = await ctx.requestContext.getAsync(AuthService);
+            ctx.state.user = await authService.tokenVerify(refreshToken);
+            await next();
           } else {
             throw error;
           }
         }
       } else {
-        throw new httpError.UnauthorizedError("Token 格式无效");
+        throw new httpError.UnauthorizedError('Token 格式无效');
       }
     };
   }
   // 配置忽略鉴权的路由地址
   public match(ctx: Context): boolean {
-    const ignoreRoutes = ["/api/auth/login", "/info", "/api/user/register"];
-    const ignore = ignoreRoutes.some((route) => ctx.path.indexOf(route) !== -1);
+    const ignoreRoutes = ['/api/auth/login', '/info', '/api/user/register'];
+    const ignore = ignoreRoutes.some(route => ctx.path.indexOf(route) !== -1);
     return !ignore;
   }
 
@@ -78,18 +76,18 @@ export class JwtMiddleware {
     const decoded = this.jwtService.decode(oldToken, { complete: true });
     ctx.state.user = decoded;
     const payload = decoded?.payload;
-    if (typeof payload === "string") {
-      throw new httpError.UnauthorizedError("无效的 token payload");
+    if (typeof payload === 'string') {
+      throw new httpError.UnauthorizedError('无效的 token payload');
     }
     const userId = payload?.userId;
     if (!userId) {
-      throw new httpError.UnauthorizedError("Token 中未找到用户 ID");
+      throw new httpError.UnauthorizedError('Token 中未找到用户 ID');
     }
     // 获取用户信息
     const userService = await ctx.requestContext.getAsync(UserService);
     const user = await userService.findById(userId);
     if (!user) {
-      throw new httpError.UnauthorizedError("用户未找到");
+      throw new httpError.UnauthorizedError('用户未找到');
     }
     // 创建新的 Token
     const newToken = await this.jwtService.sign(
@@ -100,12 +98,12 @@ export class JwtMiddleware {
       },
       this.jwtConfig.secret,
       {
-        expiresIn: "12h",
+        expiresIn: '12h',
       }
     );
     return newToken;
   }
   public static getName(): string {
-    return "jwt";
+    return 'jwt';
   }
 }
