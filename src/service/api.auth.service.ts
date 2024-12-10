@@ -1,7 +1,7 @@
 import { Provide, Inject, Config } from '@midwayjs/core';
 import { JwtService } from '@midwayjs/jwt';
 import { Context } from '@midwayjs/koa';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { AuthDao } from '../dao/authDao';
 import { BigIntService } from './bigInt.service';
 import { LoginDTO, UserDTO } from '../dto/user';

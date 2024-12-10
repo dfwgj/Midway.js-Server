@@ -1,7 +1,7 @@
 import { Provide, Inject } from '@midwayjs/core';
 import { UserDao } from '../dao/userDao';
 import { UserDTO } from '../dto/user';
-import * as bcrypt from 'bcrypt';
+import * as bcrypt from 'bcryptjs';
 import { BigIntService } from './bigInt.service';
 
 @Provide()
