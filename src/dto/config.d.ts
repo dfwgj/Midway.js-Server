@@ -1,5 +1,3 @@
-// types/config.d.ts
-
 import { MidwayConfig } from '@midwayjs/core';
 
 export interface DBConfig {

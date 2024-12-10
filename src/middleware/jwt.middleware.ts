@@ -49,7 +49,7 @@ export class JwtMiddleware {
           if (error.name === 'TokenExpiredError') {
             // Token 过期时，尝试刷新 token
             const refreshToken = await this.refreshToken(ctx, token);
-            ctx.set('Authorization', `Bearer ${refreshToken}`); // 将新 Token 设置到响应头
+            ctx.state.newToken = refreshToken // 添加新的 token
             // 使用新的 Token 获取用户信息
             const authService = await ctx.requestContext.getAsync(AuthService);
             ctx.state.user = await authService.tokenVerify(refreshToken);
