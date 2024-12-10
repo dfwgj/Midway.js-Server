@@ -7,13 +7,19 @@ import { Caching } from '@midwayjs/cache-manager';
 @Provide()
 export class UserDao {
   // 新添加用户
-  async addUser(body: UserDTO) {
+  async addUser(
+    name: UserDTO['name'],
+    account: UserDTO['account'],
+    email: UserDTO['email'],
+    department: UserDTO['department'],
+    hashPassword: UserDTO['hashPassword']
+  ) {
     const sql = `
       INSERT INTO xuesheng_user
-        (name, account, email, password, created_at)
-        VALUES (?, ?, ?, ?, NOW())
+        (name, account, email,department, password, created_at)
+        VALUES (?, ?, ?, ?,?, NOW())
     `;
-    const sqlParams = [body.name, body.account, body.email, body.hashPassword];
+    const sqlParams = [name, account, email, department, hashPassword];
     return await query(sql, sqlParams);
   }
 
@@ -41,22 +47,13 @@ export class UserDao {
     const sqlParams = [userId];
     return (await query(sql, sqlParams))[0];
   }
-
-  // 新用户注册
-  async register(body: UserDTO) {
+  //删除用户
+  async delUser(userId: UserDTO['userId']) {
     const sql = `
-      INSERT INTO xuesheng_user
-        (account, name, email, password, department, created_at)
-        VALUES (?, ?, ?, ?, ?, NOW())
+      DELETE FROM xuesheng_user
+      WHERE user_id = ?
     `;
-    const sqlParams = [
-      body.account,
-      body.name,
-      body.email,
-      body.hashPassword,
-      body.department,
-    ];
-
+    const sqlParams = [userId];
     return await query(sql, sqlParams);
   }
 }

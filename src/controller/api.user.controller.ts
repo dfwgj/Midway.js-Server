@@ -30,12 +30,7 @@ export class APIController {
   @Get('/getUser')
   async getUser(@Query('userId') userId: UserDTO['userId']): Promise<object> {
     // 检查 uid 是否存在
-    try {
-      return await this.userService.findById(userId);
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
+    return await this.userService.findById(userId);
   }
 
   /**
@@ -47,8 +42,22 @@ export class APIController {
    * @returns {object} user - 用户信息
    * */
   @Post('/addUser')
-  async addUser(@Body() body: UserDTO): Promise<object> {
-    return await this.userService.addUser(body);
+  async addUser(
+    @Body('name') name: UserDTO['name'],
+    @Body('account') account: UserDTO['account'],
+    @Body('email') email: UserDTO['email'],
+    @Body('password') password: UserDTO['password'],
+    @Body('department') department: UserDTO['department'],
+    @Body('hashPassword') hashPassword: UserDTO['hashPassword']
+  ): Promise<object> {
+    return await this.userService.addUser(
+      name,
+      account,
+      email,
+      password,
+      department,
+      hashPassword
+    );
   }
   /**
    * @name register 用户注册
@@ -59,7 +68,21 @@ export class APIController {
    * @returns {object} user - 用户信息
    * */
   @Post('/register')
-  async register(@Body() body: UserDTO): Promise<object> {
-    return await this.userService.register(body);
+  async register(
+    @Body('name') name: UserDTO['name'],
+    @Body('account') account: UserDTO['account'],
+    @Body('email') email: UserDTO['email'],
+    @Body('password') password: UserDTO['password'],
+    @Body('department') department: UserDTO['department'],
+    @Body('hashPassword') hashPassword: UserDTO['hashPassword']
+  ): Promise<object> {
+    return await this.userService.register(
+      name,
+      account,
+      email,
+      password,
+      department,
+      hashPassword
+    );
   }
 }

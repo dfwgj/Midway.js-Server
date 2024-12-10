@@ -6,6 +6,7 @@ import {
   Body,
   Headers,
   UseGuard,
+  Del,
 } from '@midwayjs/core';
 import { Context } from '@midwayjs/koa';
 import { AuthService } from '../service/api.auth.service';
@@ -32,8 +33,11 @@ export class LoginController {
    * @returns {Object} token - 登录凭证
    */
   @Post('/login')
-  async login(@Body() body: LoginDTO): Promise<string> {
-    return await this.authService.login(body);
+  async login(
+    @Body('account') account: LoginDTO['account'],
+    @Body('password') password: LoginDTO['password']
+  ): Promise<string> {
+    return await this.authService.login(account, password);
   }
   /**
    * @name tokenVerify 凭证校验
@@ -56,13 +60,26 @@ export class LoginController {
    */
   @UseGuard(AuthGuard)
   @Put('/setAdmin')
-  async setAdmin(
-    @Body() { userId }: { userId: UserDTO['userId'] }
-  ): Promise<object> {
+  async setAdmin(@Body('userId') userId: UserDTO['userId']): Promise<object> {
     const user = await this.userService.findById(userId);
     if (!user) {
       throw new Error('用户不存在');
     }
     return await this.authService.setAdmin(userId);
+  }
+  /**
+   * @name delUser 删除用户
+   * @description Del /auth/del
+   * @param {string} userId - 用户id
+   * @returns {Object} success 成功提示
+   */
+  @UseGuard(AuthGuard)
+  @Del('/del')
+  async delUser(@Body('userId') userId: UserDTO['userId']): Promise<object> {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new Error('用户不存在');
+    }
+    return await this.authService.delUser(userId);
   }
 }

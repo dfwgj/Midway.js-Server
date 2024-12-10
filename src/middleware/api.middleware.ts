@@ -8,20 +8,20 @@ export class FormatMiddleware implements IMiddleware<Context, NextFunction> {
   resolve() {
     return async (ctx: Context, next: NextFunction) => {
       const result = await next();
-      if(ctx.state.newToken === undefined ){
+      if (ctx.state.newToken === undefined) {
         return {
           code: 0,
           message: 'OK',
           data: result,
         };
-      }else{
-      return {
-        code: 0,
-        message: 'OK',
-        data: result,
-        newToken:ctx.state.newToken,
-      };
-    };
+      } else {
+        return {
+          code: 0,
+          message: 'OK',
+          data: result,
+          newToken: ctx.state.newToken,
+        };
+      }
     };
   }
   // 匹配方法，判断请求路径是否包含 "/api"
